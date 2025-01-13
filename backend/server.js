@@ -8,15 +8,19 @@ import notificationsRoutes from "./routes/notificationsroute.js";
 import connectionsRoutes from "./routes/connectionroute.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path";
 
 const app = express();
+const __dirname = path.resolve();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
+if (process.env.NODE_ENV !== "production") {
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
+    })
+  );
+}
 app.use(cookieParser()); // Should print your JWT if cookie is being sent
 
 dotenv.config();
@@ -28,6 +32,14 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);
 app.use("/api/v1/notifications", notificationsRoutes);
 app.use("/api/v1/connections", connectionsRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+}
+
 app.listen(PORT, () => {
   console.log("server running on port " + PORT);
   connectDB();

@@ -3,7 +3,7 @@ import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, User, Users } from "lucide-react";
 
-const Navbar = ({ children }) => {
+const Navbar = () => {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
   });
@@ -16,7 +16,6 @@ const Navbar = ({ children }) => {
     },
     enabled: !!authUser,
   });
-  console.log(notifications);
   const { data: connectionRequests } = useQuery({
     queryKey: ["connectionRequests"],
     queryFn: async () => {
@@ -30,7 +29,7 @@ const Navbar = ({ children }) => {
       axiosInstance.post("/auth/logout");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["authUser"]);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
   const unreadNotificationCount = notifications?.data.filter(
