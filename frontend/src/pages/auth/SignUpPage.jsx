@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
-import SignUpForm from "../../components/auth/signUpForm";
+import SignUpForm from "../../components/auth/SignUpForm";
 const SignUpPage = () => {
-  console.log("Hi");
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
